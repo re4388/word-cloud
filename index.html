@@ -7,8 +7,32 @@
   <script src="https://d3js.org/d3.v2.min.js?2.10.0"></script>
   <title>World Cloud</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-storage.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDhq7lrjKLRjdjEv0OQ7XP6SyBcpGdGfVM",
+      authDomain: "angular-82e48.firebaseapp.com",
+      databaseURL: "https://angular-82e48.firebaseio.com",
+      projectId: "angular-82e48",
+      storageBucket: "angular-82e48.appspot.com",
+      messagingSenderId: "1027698760097",
+      appId: "1:1027698760097:web:96747641fe92c5f6f193e0",
+      measurementId: "G-R3CPF98GGL",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var storage = firebase.storage();
+    // const storageRef = firebase.storage().ref();
+    // console.log(storageRef);
+  </script>
   <script defer src="./app.js"></script>
 </head>
+
 <body>
 </body>
+
 </html>

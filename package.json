@@ -12,11 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^5.1.2",
     "canvas": "^2.6.1",
     "d3": "^5.16.0",
     "d3-cloud": "^1.2.5",
     "no": "0.0.1",
     "node-pre-gyp": "^0.15.0",
+    "regenerator-runtime": "^0.13.7",
     "wink-nlp-utils": "^2.0.6",
     "wink-pos-tagger": "^2.2.2"
   }

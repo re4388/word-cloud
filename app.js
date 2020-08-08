@@ -1,202 +1,89 @@
 // https://flaviocopes.com/parcel-regeneratorruntime-not-defined/
 import 'regenerator-runtime/runtime'
+import {
+  async
+} from 'regenerator-runtime';
 
-import posTagger from 'wink-pos-tagger'
-import nlp from 'wink-nlp-utils'
-// import Canvas  from 'canvas';
 import cloud from './node_modules/d3-cloud/build/d3.layout.cloud'
-var storage = firebase.app().storage("gs://angular-82e48.appspot.com");
-var storageRef = storage.ref();
+import {
+  firestoreLocationPath,
+  firestoreFileName
+} from './config'
+import {
+  getSearchTerm
+} from './getSearchTerm'
+import {
+  extractedData
+} from './getDataFromFirestorage'
+import {
+  allNlpProcess
+} from './nlpJob'
+import {
+  covert2cloudFormat
+} from './formatConvert'
+import {
+  drawCloud
+} from './drawcloud';
+
+import {
+  extractedDataFaunaDB
+} from './getDataFaunaDB'
+import {
+  data
+} from 'jquery';
+
+let nlpProcessed = ''
+let countThreshold = 0
 
 
-var listRef = storageRef.child('word_cloud.txt');
-const data = '';
+$('.threshold')
+  .change(function () {
+    var str = "";
+    $("select option:selected").each(function () {
+      str += $(this).text() + " ";
+    });
+
+    countThreshold = str
+    console.log(`new threshold: `, countThreshold);
+    $('#d3').empty();
+
+    if (nlpProcessed === '') {
+      console.log('no data during first load');
+    } else {
+      const frequencyList = covert2cloudFormat(nlpProcessed, countThreshold)
+      drawCloud(frequencyList)
+    }
+
+  }).change();
+
+
 
 (async () => {
   try {
 
-    /* get from firebase storage */
-    /* TODO: currently, the storage security is set to no need to auth,
-    in the future, if I need to add auth in other project, I need to
-    add auth logic here */
-    const url = await listRef.getDownloadURL()
-    const fetchedData = await fetch(url)
-    const resText = await fetchedData.text()
-    console.log(resText)
+    /* grab search term */
+    // getSearchTerm()
 
 
 
-    /* clearing */
-    let a = nlp.string.retainAlphaNums(resText)
-    let b = nlp.string.removeSplChars(a)
-    let c = nlp.string.removeElisions(b)
-    let d = nlp.string.removePunctuations(c)
-    let afterCleanData = nlp.string.removeExtraSpaces(d)
+    /* get data from FaunaDB */
+    // let externalData = await extractedDataFaunaDB()
+    // console.log(`FanuaDB in app.js: `, externalData.substring(0, 200))
 
+    /* get data from firebase storage*/
+    let externalData = await extractedData()
+    console.log(externalData.substring(0, 200))
 
-    /* use POS to get more sensible words */
-    var tagger = posTagger()
-    const posResult0 = tagger.tagSentence(afterCleanData);
-    const getNNObj = posResult0.filter((ele) => ele.pos === 'NN')
-    const NNAry = getNNObj.map((ele) => ele.value)
-    // console.log(NNAry)
-    const getVBObj = posResult0.filter((ele) => ele.pos === 'VB')
-    const VBAry = getVBObj.map((ele) => ele.value)
-    // console.log(VBAry)
-    const allWord = [...NNAry, ...VBAry]
+    /* nlp process */
+    nlpProcessed = allNlpProcess(externalData)
 
-    /* TODO: just to filter out one word here, `be`, but we can do more or in a more systematic way */
-    const allWord2 = allWord.filter((ele) => ele !== 'be')
-
-
-    /* get bag of word */
-    const obj1 = nlp.tokens.bagOfWords(allWord2);
-
-
-    /* create d3-format */
-    let frequency_list = []
-    for (let key in obj1) {
-      if (obj1[key] > 2) {
-        let o = {};
-        o.text = key
-        o.size = obj1[key] * 4
-        frequency_list.push(o)
-      }
-    }
+    /* covert to d3-cloud input format */
+    const frequencyList = covert2cloudFormat(nlpProcessed, 0)
 
     /* use d3 to draw word cloud */
-    var color = d3.scale.linear()
-      .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
-      .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+    drawCloud(frequencyList)
 
-    cloud().size([800, 300])
-      .words(frequency_list)
-      .rotate(0)
-      .fontSize(function (d) {
-        return d.size;
-      })
-      .on("end", draw)
-      .start();
-
-    function draw(words) {
-      d3.select("body").append("svg")
-        .attr("width", 850)
-        .attr("height", 350)
-        .attr("class", "wordcloud")
-        .append("g")
-        // without the transform, words words would get cutoff to the left and top, they would
-        // appear outside of the SVG area
-        .attr("transform", "translate(320,200)")
-        .selectAll("text")
-        .data(words)
-        .enter().append("text")
-        .style("font-size", function (d) {
-          return d.size + "px";
-        })
-        .style("fill", function (d, i) {
-          return color(i);
-        })
-        .attr("transform", function (d) {
-          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function (d) {
-          return d.text;
-        });
-    }
   } catch (e) {
     console.log('error', e);
   }
 })()
-
-
-
-
-/* promise then version */
-
-// listRef.getDownloadURL().then(data => {
-//   fetch(data)
-//     .then(function (response) {
-//       response.text().then(function (text) {
-//         console.log(text);
-//         // console.log(typeof text === 'string');
-//         data += text
-//         /* clearing */
-//         let a = nlp.string.retainAlphaNums(data)
-//         let b = nlp.string.removeSplChars(a)
-//         let c = nlp.string.removeElisions(b)
-//         let d = nlp.string.removePunctuations(c)
-//         let afterCleanData = nlp.string.removeExtraSpaces(d)
-
-
-//         /* use POS to get more sensible words */
-//         var tagger = posTagger()
-//         const posResult0 = tagger.tagSentence(afterCleanData);
-//         const getNNObj = posResult0.filter((ele) => ele.pos === 'NN')
-//         const NNAry = getNNObj.map((ele) => ele.value)
-//         // console.log(NNAry)
-//         const getVBObj = posResult0.filter((ele) => ele.pos === 'VB')
-//         const VBAry = getVBObj.map((ele) => ele.value)
-//         // console.log(VBAry)
-//         const allWord = [...NNAry, ...VBAry]
-
-//         /* TODO: just to filter out one word here, `be`, but we can do more or in a more systematic way */
-//         const allWord2 = allWord.filter((ele) => ele !== 'be')
-
-
-//         /* get bag of word */
-//         const obj1 = nlp.tokens.bagOfWords(allWord2);
-
-
-//         /* create d3-format */
-//         let frequency_list = []
-//         for (let key in obj1) {
-//           if (obj1[key] > 2) {
-//             let o = {};
-//             o.text = key
-//             o.size = obj1[key] * 4
-//             frequency_list.push(o)
-//           }
-//         }
-
-//         /* use d3 to draw word cloud */
-//         var color = d3.scale.linear()
-//           .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
-//           .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
-
-//         cloud().size([800, 300])
-//           .words(frequency_list)
-//           .rotate(0)
-//           .fontSize(function (d) {
-//             return d.size;
-//           })
-//           .on("end", draw)
-//           .start();
-
-//         function draw(words) {
-//           d3.select("body").append("svg")
-//             .attr("width", 850)
-//             .attr("height", 350)
-//             .attr("class", "wordcloud")
-//             .append("g")
-//             // without the transform, words words would get cutoff to the left and top, they would
-//             // appear outside of the SVG area
-//             .attr("transform", "translate(320,200)")
-//             .selectAll("text")
-//             .data(words)
-//             .enter().append("text")
-//             .style("font-size", function (d) {
-//               return d.size + "px";
-//             })
-//             .style("fill", function (d, i) {
-//               return color(i);
-//             })
-//             .attr("transform", function (d) {
-//               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-//             })
-//             .text(function (d) {
-//               return d.text;
-//             });
-//         }
-//       });
-//     });
-// });

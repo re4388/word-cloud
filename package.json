@@ -13,9 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^5.1.2",
+    "apollo-fetch": "^0.7.0",
     "canvas": "^2.6.1",
     "d3": "^5.16.0",
     "d3-cloud": "^1.2.5",
+    "faunadb": "^2.14.2",
+    "jquery": "^3.5.1",
     "no": "0.0.1",
     "node-pre-gyp": "^0.15.0",
     "regenerator-runtime": "^0.13.7",

@@ -1,8 +1,10 @@
 body {
   font-family: "Lucida Grande", "Droid Sans", Arial, Helvetica, sans-serif;
-  text-align: center
+  text-align: center!important
 }
 
 .bld {
   font-weight: bold;
 }
+
+

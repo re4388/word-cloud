@@ -18,12 +18,12 @@ function drawCloud(frequency_list) {
   function draw(words) {
     d3.select('#d3').append("svg")
       .attr("width", 850)
-      .attr("height", 350)
+      .attr("height", 400)
       .attr("class", "wordcloud")
       .append("g")
       // without the transform, words words would get cutoff to the left and top, they would
       // appear outside of the SVG area
-      .attr("transform", "translate(320,200)")
+      .attr("transform", "translate(420,200)")
       .selectAll("text")
       .data(words)
       .enter().append("text")

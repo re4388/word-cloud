@@ -32,58 +32,71 @@ import {
   data
 } from 'jquery';
 
+let externalData = ''
 let nlpProcessed = ''
-let countThreshold = 0
+let searchTerm = 'covid19'
+let countThreshold = 1
+let textSizeFactor = 12
 
-
-$('.threshold')
-  .change(function () {
-    var str = "";
-    $("select option:selected").each(function () {
-      str += $(this).text() + " ";
-    });
-
-    countThreshold = str
-    console.log(`new threshold: `, countThreshold);
-    $('#d3').empty();
-
-    if (nlpProcessed === '') {
-      console.log('no data during first load');
-    } else {
-      const frequencyList = covert2cloudFormat(nlpProcessed, countThreshold)
-      drawCloud(frequencyList)
-    }
-
-  }).change();
-
-
-
-(async () => {
+/* assemble pipeline */
+const main = async (searchTerm, countThreshold, textSizeFactor) => {
   try {
-
-    /* grab search term */
-    // getSearchTerm()
-
-
-
     /* get data from FaunaDB */
-    // let externalData = await extractedDataFaunaDB()
-    // console.log(`FanuaDB in app.js: `, externalData.substring(0, 200))
-
-    /* get data from firebase storage*/
-    let externalData = await extractedData()
-    console.log(externalData.substring(0, 200))
-
-    /* nlp process */
+    externalData = await extractedDataFaunaDB(searchTerm)
+    // console.log(externalData.substring(0, 200))
     nlpProcessed = allNlpProcess(externalData)
 
-    /* covert to d3-cloud input format */
-    const frequencyList = covert2cloudFormat(nlpProcessed, 0)
+    let frequencyList = covert2cloudFormat(
+      nlpProcessed, countThreshold, textSizeFactor)
 
-    /* use d3 to draw word cloud */
     drawCloud(frequencyList)
 
   } catch (e) {
     console.log('error', e);
   }
+}
+
+/* run the code! */
+(async () => {
+  await main(searchTerm, countThreshold, textSizeFactor)
 })()
+
+
+$.fn.serializeObject = function () {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function () {
+    if (o[this.name]) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || '');
+    } else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
+};
+
+$(function () {
+  $('form.login').on('submit', async function (e) {
+    e.preventDefault();
+    var formData = $(this).serializeObject();
+    console.log(formData);
+    // $('.datahere').html(JSON.stringify(formData));
+    textSizeFactor = formData['wordSize']
+    searchTerm = formData['searchTerm']
+    countThreshold = formData['threshold']
+    console.log(textSizeFactor, searchTerm, countThreshold);
+
+    // clear DOM
+    $('#d3').empty();
+
+    /* re-draw cloud */
+    if (nlpProcessed === '') {
+      console.log('no data during first load222');
+    } else {
+      await main(searchTerm, countThreshold, textSizeFactor)
+    }
+  });
+});

@@ -8,33 +8,15 @@ import  faunadb  from 'faunadb'
 // )
 
 
-const extractedDataFaunaDB = async () => {
-
-//   const query = `
-//   query {
-//     allTweets {
-//       data {
-//         textFullText
-//       }
-//     }
-//   }
-// `
-//   let result = ''
-
-//   apolloFetch(query )
-//   .then(res => result = res)
-//   .catch( e => console.log(e));
-
-//   console.log(`FanuaDB: `,result.substring(0,200));
+const extractedDataFaunaDB = async (collectionName) => {
   let q = faunadb.query
-  let client = new faunadb.Client({ secret: "fnADyt4HzjACDMyja8lT76ScZokmsCJsYE5Qhul3" })
-  // const result = await client.query(
-  //   q.Paginate(q.Collections())
-  // )
+  let client = new faunadb.Client(
+    { secret: "fnADyt4HzjACDMyja8lT76ScZokmsCJsYE5Qhul3" })
+  // const collectionName = ``;
 
   const result = await client.query(
     q.Map(
-      q.Paginate(q.Documents(q.Collection('tweet'))),
+      q.Paginate(q.Documents(q.Collection(collectionName))),
       q.Lambda(x => q.Get(x))
     )
   )
@@ -42,7 +24,7 @@ const extractedDataFaunaDB = async () => {
 
   let allText = ''
 
-  result['data'].forEach(item => allText += item.data.textFullText[0])
+  result['data'].forEach(item => allText += item.data.textFullText)
   return allText
 };
 

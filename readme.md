@@ -8,7 +8,7 @@
 - use `d3.cloud` to generate world cloud
 - Parcel.js as bundle tool
 
-<img src="./asset/demo.gif" width="890" height="200"/>
+<img src="./asset/demo.gif" width="490" height="200"/>
 
 [World Cloud DEMO](https://angular-82e48.web.app/)
 ## TODO

@@ -38,38 +38,41 @@
 
 <body>
   <h1 class="display-4 text-center p-4">Word Cloud</h1>
-  <!-- <label>Word Count threshold</label><br> -->
-  <!-- <select id="threshold" multiple="multiple" onChange="changeThreshold(this.value);">
-    <option value="1">0</option>
-    <option value="2">1</option>
-    <option value="3" selected="selected">2</option>
-  </select> -->
 
-  <!-- <select id="Ultra">
-    <option value="value1">Text one</option>
-    <option value="value2">Text two</option>
-    <option value="value3">Text three</option>
-    <option value="valueN">Text N</option>
-  </select> -->
-
-  <h5 id="searchTerm"></h5>
-
-  <div>
-    <label>Word Count threshold:
-      <select class="threshold" name="ice-cream">
-        <option selected value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
+    <h5 id="searchTerm"></h5>
+    <form class="login">
+      <label>Search Term</label>
+      <select class="input2" name="searchTerm">
+        <option selected="" value="covid19">covid19</option>
+        <option value="taiwan">taiwan</option>
+        <!-- <option value="a3">to do..</option> -->
       </select>
-    </label>
-    <div class="result"></div>
-  </div>
-  <div id="d3"></div>
 
+      <label>Word Size</label>
+      <select class="input1" name="wordSize">
+        <option value="8">8</option>
+        <option selected="" value="12">12</option>
+        <option value="15">15</option>
+        <option value="17">17</option>
+        <option value="20">20</option>
+      </select>
 
+      <label>Count Threshold</label>
+      <select class="input3" name="threshold">
+        <option value="0">0</option>
+        <option selected="" value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+      <br>
+      <button style="width: 100px;" type='submit'>Try</button>
+    </form>
+    <!-- <div class="datahere"></div> -->
 
-
-
+    <br>
+    <br>
+    <br>
+    <div id="d3"></div>
 
 
 

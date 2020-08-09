@@ -7,13 +7,13 @@ import {async} from 'regenerator-runtime';
 
 
 function dataClearning(data) {
-  console.log(data);
+  // console.log(data);
   let a = nlp.string.retainAlphaNums(data)
   let b = nlp.string.removeSplChars(a)
   let c = nlp.string.removeElisions(b)
   let d = nlp.string.removePunctuations(c)
   let afterCleanData = nlp.string.removeExtraSpaces(d)
-  console.log(`after clean`, afterCleanData);
+  // console.log(`after clean`, afterCleanData);
   return afterCleanData
 }
 

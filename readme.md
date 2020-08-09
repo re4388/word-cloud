@@ -24,5 +24,4 @@ A simple full-stack side-project
 - [node.js - Upload File to Firebase Storage using Admin SDK - Stack Overflow](https://stackoverflow.com/questions/55111346/upload-file-to-firebase-storage-using-admin-sdk)
 - https://stackoverflow.com/questions/61488323/how-to-get-all-documents-from-a-collection-in-faunadb
 - https://github.com/fauna/faunadb-js
--
 

@@ -1,12 +1,16 @@
 # Dynamic Word Cloud
 
-## About
-- Use [pipeline dream](https://pipedream.com/) dream to continue scrap  @sue lee (one of my favorite indie singer on Youtube) from Twitter
-- And then save to Google Doc Sheet (I use Google Doc sheet as My structure db for simple use and check data easily)
-- Use another pipeline in [pipeline dream](https://pipedream.com/) to get all rows in Google Doc Sheet and save into txt in firebase storage
-- Frontend code to `fetch` data from firebase storage and then use `wink-nlp-utils` and related tool to clean and tokenize data
-- use `d3.cloud` to generate world cloud
-- Parcel.js as bundle tool
+
+A simple full-stack side-project
+
+## How this is done?
+- Backend
+  - Use [pipeline dream](https://pipedream.com/)
+  - twitter even source with search word -> Faunadb
+  - check Faunadb data amount every day and send mail to me
+  - detail see [here](https://www.notion.so/nture4388/Word-cloud-Backend-7a1bcbb4905942fc86e573a5e81a3bca)
+- Frontend
+  - see [here](https://www.notion.so/nture4388/World-cloud-frontend-d499b33ad5fe4af8b9188e810e833ce6)
 
 <img src="./asset/demo.gif" width="490" height="200"/>
 

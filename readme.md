@@ -12,11 +12,17 @@ A simple full-stack side-project
 - Frontend
   - see [here](https://www.notion.so/nture4388/World-cloud-frontend-d499b33ad5fe4af8b9188e810e833ce6)
 
-<img src="./asset/demo.gif" width="490" height="200"/>
+<img src="./asset/demo.gif" width="450" height="220"/>
 
 [World Cloud DEMO](https://angular-82e48.web.app/)
 ## TODO
   - try other token? say only noun
+  
+  
+## Architecture
+<img src="https://files.benhu.info/2020/08/s1.PNG"/>
+
+
 
 ## reference
 - [Working with the filesystem in Node.js | Docs](https://docs.pipedream.com/workflows/steps/code/nodejs/working-with-files/#the-tmp-directory)
